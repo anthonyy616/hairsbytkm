@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - Hairs by TKM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script { FunctionsHttpError, FunctionsRelayError, FunctionsFetchError } from 'https://esm.sh/@supabase/supabase-js@2';></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #ff6b6b, #ffa502, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .card-gradient {
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        .cta-button {
+            background: linear-gradient(90deg, #ff6b6b, #ffa502);
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <header class="py-6 px-4 sm:px-8 bg-black bg-opacity-50 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold gradient-text">HAIRS BY TKM</div>
+            
+            <nav class="hidden md:flex space-x-6">
+                <a href="homepage.html" class="hover:text-orange-400 transition">Home</a>
+                <a href="services.html" class="hover:text-orange-400 transition">Services</a>
+                <a href="cart.html" class="hover:text-orange-400 transition">Cart</a>
+            </nav>
+            
+            <!-- Dynamic Auth Section -->
+            <div id="nav-auth-section">
+                <!-- Populated by auth.js -->
+            </div>
+            
+            <button id="menu-toggle" class="md:hidden text-white">
+                <i data-feather="menu"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black bg-opacity-70 px-4 py-2">
+            <div class="flex flex-col space-y-3 text-white">
+                <a href="homepage.html" class="hover:text-orange-400 transition">Home</a>
+                <a href="services.html" class="hover:text-orange-400 transition">Services</a>
+                <a href="cart.html" class="hover:text-orange-400 transition">Cart</a>
+                <div id="mobile-auth-section">
+                    <!-- Populated by auth.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Header -->
+    <section class="py-16 bg-gradient-to-r from-gray-900 to-black text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-4">Your Shopping Cart</h1>
+            <p class="text-xl max-w-2xl mx-auto">Review your services before booking and make sure to add a valid date</p>
+        </div>
+    </section>
+
+    <!-- Cart Content -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Cart Items -->
+                <div class="lg:col-span-2">
+                    <div class="card-gradient rounded-xl p-6 mb-6">
+                        <h2 id="cart-title" class="text-2xl font-bold mb-6">Cart Items</h2>
+                        <div id="cart-items-container"></div>
+                    </div>
+    
+                    <div class="flex justify-between items-center">
+                        <a href="services.html" class="flex items-center text-orange-400 font-bold">
+                            <i data-feather="arrow-left" class="mr-2"></i> Continue Browsing
+                        </a>
+                        <button class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition" onclick="loadCart()">Update Cart</button>
+                    </div>
+                </div>
+                
+                <!-- Order Summary and Booking -->
+                <div>
+                    <div class="card-gradient rounded-xl p-6 sticky top-24" data-aos="fade-left">
+                        <h2 class="text-2xl font-bold mb-6">Order Summary</h2>
+            
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between">
+                            <span>Subtotal</span>
+                            <span id="subtotal">0 TL</span>
+                        </div>
+                        
+                        
+                        <div class="flex justify-between">
+                            <span>Booking Fee</span>
+                            <span id="booking-fee">50 TL</span>
+                        </div>
+                        <div class="border-t pt-4 flex justify-between font-bold text-lg">
+                            <span>Total</span>
+                            <span id="total">0 TL</span>
+                        </div>
+                    </div>
+            
+                        <!-- Booking Section -->
+                        <div class="mt-6">
+                            <h3 class="text-xl font-bold mb-4">Book Appointment</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="appointment-date" class="block text-sm font-medium text-gray-300 mb-2">Date</label>
+                                    <input type="date" id="appointment-date" class="w-full px-4 py-2 border border-orange-300 rounded-lg bg-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500" required min="${new Date().toISOString().split('T')[0]}">
+                                </div>
+                                <div>
+                                    <label for="appointment-time" class="block text-sm font-medium text-gray-300 mb-2">Time</label>
+                                    <select id="appointment-time" class="w-full px-4 py-2 border border-orange-300 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-orange-500" required>
+                                        <option value="" disabled selected>Select a time</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                        <option value="18:00">6:00 PM</option>
+                                        <option value="18:00">8:00 PM</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="additional-notes" class="block text-sm font-medium text-gray-300 mb-2">Additional Notes (Optional)</label>
+                                    <textarea id="additional-notes" class="w-full px-4 py-2 border border-orange-300 rounded-lg bg-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500" rows="4" placeholder="Any special requests or notes for your appointment?"></textarea>
+                                </div>
+                                <div id="availability-status" class="text-sm text-gray-400"></div>
+                            </div>
+                            <button id="book-appointment" class="w-full cta-button py-3 rounded-lg mt-4 transition transform hover:scale-[1.02]">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (copy from homepage.html) -->
+
+    <script>
+        // Supabase Initialization (use your credentials)
+        const supabaseUrl = 'https://nkmxznymrpvgzlznprmu.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rbXh6bnltcnB2Z3psem5wcm11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDkyMTcsImV4cCI6MjA3NTQ4NTIxN30.5ZUz6WaFL-GTr72PXuCvG-4Xq_rplKZ_E0y3iI2HLmQ';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Config
+        const MAX_BOOKINGS_PER_SLOT = 2; // Max appointments per hour slot  
+
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Initialize AOS and Feather
+        AOS.init({ duration: 800, easing: 'ease-in-out' });
+        feather.replace();
+
+        // Cart Functions (adapted)
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function loadCart() {
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            console.log('Loading cart:', cart); // Debug: Check if image is in cart data
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-400">Your cart is empty.</p>';
+                return;
+            }
+
+            cart.forEach((item, index) => {
+                let itemName = item.name || `Custom ${capitalize(item.type || 'Service')}`;
+                let desc = item.description || '';
+                if (item.type) desc += desc ? `, Type: ${item.type}` : `Type: ${item.type}`;
+
+                const itemHtml = `
+                    <div class="flex items-start mb-6 pb-6 border-b border-gray-800 last:border-0" data-aos="fade-up">
+                        <img src="${item.image || 'https://via.placeholder.com/96'}" alt="${itemName}" class="w-24 h-24 rounded-lg object-cover mr-4">
+                        <div class="flex-grow">
+                            <h3 class="font-bold text-lg">${itemName}</h3>
+                            <p class="text-gray-400">${desc}</p>
+                            <div class="flex items-center mt-2">
+                                <button class="bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-700 transition" onclick="updateQuantity(${index}, -1)">-</button>
+                                <span class="mx-3 font-medium">${item.quantity || 1}</span>
+                                <button class="bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-700 transition" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-lg">₺${((item.price || 0) * (item.quantity || 1)).toLocaleString()}</p>
+                            <button class="text-red-600 mt-2 flex items-center hover:text-red-700 transition" onclick="removeItem(${index})">
+                                <i data-feather="trash-2" class="mr-1"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += itemHtml;
+                console.log('Rendered item image:', item.image); // Debug: Check per item
+            });
+            feather.replace();
+            updateTotals();
+        }
+        function updateQuantity(index, change) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart[index]) {
+                cart[index].quantity = Math.max(1, (cart[index].quantity || 1) + change);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                loadCart();
+            }
+        }
+
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        function updateTotals() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0);
+            const bookingFee = 50; // Flat booking fee, adjust as needed
+            const total = subtotal + bookingFee ;
+
+            document.getElementById('subtotal').textContent = `${subtotal.toLocaleString()} TL`;
+            document.getElementById('booking-fee').textContent = `${bookingFee.toLocaleString()} TL`;
+            document.getElementById('total').textContent = `${total.toLocaleString()} TL`;
+        }
+
+        // Appointment Booking Functions
+        async function checkAvailability(date, time) {
+            const appointmentTime = new Date(`${date}T${time}:00`).toISOString(); // Round to hour, UTC
+            const slotStart = new Date(appointmentTime);
+            const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000); // 1 hour later
+
+            const { data, error } = await supabase
+                .from('appointments')
+                .select('count', { count: 'exact' })
+                .gte('appointment_time', slotStart.toISOString())
+                .lt('appointment_time', slotEnd.toISOString());
+
+            if (error) {
+                console.error('Availability check error:', error);
+                return false;
+            }
+
+            return data[0].count < MAX_BOOKINGS_PER_SLOT;
+        }
+
+        async function bookAppointment(cart) {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                alert('Please log in to book an appointment.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const date = document.getElementById('appointment-date').value;
+            const time = document.getElementById('appointment-time').value;
+            const notes = document.getElementById('additional-notes').value.trim();
+            if (!date || !time) {
+                alert('Please select date and time.');
+                return;
+            }
+
+            // Validate future date/time
+            const selectedDateTime = new Date(`${date}T${time}:00`);
+            const now = new Date();
+            if (selectedDateTime <= now) {
+                alert('Cannot book appointments in the past. Please select a future date and time.');
+                document.getElementById('availability-status').textContent = 'Please select a future date and time.';
+                document.getElementById('availability-status').classList.add('text-red-500');
+                return;
+            }
+
+            const appointmentTime = selectedDateTime.toISOString();
+            const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0);
+            const bookingFee = 50;
+            const total = subtotal + bookingFee;
+
+            const isAvailable = await checkAvailability(date, time);
+            if (!isAvailable) {
+                document.getElementById('availability-status').textContent = 'Slot is fully booked. Please choose another time.';
+                document.getElementById('availability-status').classList.add('text-red-500');
+                return;
+            }
+
+            const { data, error } = await supabase
+                .from('appointments')
+                .insert({
+                user_id: session.user.id,
+                service_details: JSON.stringify(cart),
+                appointment_time: appointmentTime,
+                total: total,
+                notes: notes || null
+                })
+                .select();
+
+            if (error) {
+                alert(`Booking failed: ${error.message}`);
+                console.error('Insert error:', error);
+                return;
+            }
+
+            // WhatsApp message
+            const bookingDetails = data[0];
+            const userEmail = session.user.email;
+            const businessPhone = '2348104427546'; // Replace with your salon WhatsApp number
+            const servicesList = cart.map(s => `${s.name} (${s.type}) - ${s.price} TL x${s.quantity}`).join('\n');
+            const message = `🔔 *New Booking Request* from ${userEmail}\n\n` +
+                            `*Date & Time*: ${new Date(appointmentTime).toLocaleString('en-US', { timeZone: 'Europe/Istanbul' })}\n` +
+                            `*Services*:\n${servicesList}\n\n` +
+                            `*Price Breakdown*:\nSubtotal: ${subtotal} TL\nBooking Fee: ${bookingFee} TL\nTotal: ${total} TL\n\n` +
+                            `${notes ? `*Additional Notes*: ${notes}\n\n` : ''}` +
+                            `Please confirm this appointment!`;
+
+            const whatsappUrl = `https://wa.me/${businessPhone}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+
+            console.log('WhatsApp message opened:', message);
+
+            localStorage.removeItem('cart');
+            window.location.href = 'homepage.html';
+            }
+    
+
+        // Realtime Subscription (optional, for live updates)
+        supabase.channel('appointments-channel')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'appointments' }, () => {
+                // Refresh availability if changes occur
+                const date = document.getElementById('appointment-date').value;
+                const time = document.getElementById('appointment-time').value;
+                if (date && time) {
+                    checkAvailability(date, time).then(isAvailable => {
+                        document.getElementById('availability-status').textContent = isAvailable ? 'Available' : 'Slot fully booked';
+                        document.getElementById('availability-status').classList.toggle('text-green-500', isAvailable);
+                        document.getElementById('availability-status').classList.toggle('text-red-500', !isAvailable);
+                    });
+                }
+            })
+            .subscribe();
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', loadCart);
+        document.getElementById('book-appointment').addEventListener('click', () => {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            bookAppointment(cart);
+        });
+
+        // Check availability on date/time change
+        ['appointment-date', 'appointment-time'].forEach(id => {
+            document.getElementById(id).addEventListener('change', async () => {
+                const date = document.getElementById('appointment-date').value;
+                const time = document.getElementById('appointment-time').value;
+                if (date && time) {
+                    const isAvailable = await checkAvailability(date, time);
+                    document.getElementById('availability-status').textContent = isAvailable ? 'Available' : 'Slot fully booked';
+                    document.getElementById('availability-status').classList.toggle('text-green-500', isAvailable);
+                    document.getElementById('availability-status').classList.toggle('text-red-500', !isAvailable);
+                }
+            });
+        });
+    </script>
+    </div>
+    <script src="auth.js" defer></script>
+</body>
+</html>
