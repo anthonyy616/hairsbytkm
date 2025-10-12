@@ -207,22 +207,26 @@
                 if (item.type) desc += desc ? `, Type: ${item.type}` : `Type: ${item.type}`;
 
                 const itemHtml = `
-                    <div class="flex items-start mb-6 pb-6 border-b border-gray-800 last:border-0" data-aos="fade-up">
-                        <img src="${item.image || 'https://via.placeholder.com/96'}" alt="${itemName}" class="w-24 h-24 rounded-lg object-cover mr-4">
-                        <div class="flex-grow">
-                            <h3 class="font-bold text-lg">${itemName}</h3>
-                            <p class="text-gray-400">${desc}</p>
-                            <div class="flex items-center mt-2">
-                                <button class="bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-700 transition" onclick="updateQuantity(${index}, -1)">-</button>
-                                <span class="mx-3 font-medium">${item.quantity || 1}</span>
-                                <button class="bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-700 transition" onclick="updateQuantity(${index}, 1)">+</button>
+                    <div class="mb-6 pb-6 border-b border-gray-800 last:border-0" data-aos="fade-up">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center">
+                            <img src="${item.image || 'https://via.placeholder.com/96'}" alt="${itemName}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover mb-2 sm:mb-0 sm:mr-4">
+                            <div class="flex-grow">
+                                <h3 class="font-bold text-lg">${itemName}</h3>
+                                <p class="text-gray-400">${desc}</p>
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center mt-2">
+                                    <div class="flex items-center mb-2 sm:mb-0">
+                                        <button class="bg-gray-800 rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-700 transition" onclick="updateQuantity(${index}, -1)">-</button>
+                                        <span class="mx-3 font-medium">${item.quantity || 1}</span>
+                                        <button class="bg-gray-800 rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-700 transition" onclick="updateQuantity(${index}, 1)">+</button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold text-lg">₺${((item.price || 0) * (item.quantity || 1)).toLocaleString()}</p>
-                            <button class="text-red-600 mt-2 flex items-center hover:text-red-700 transition" onclick="removeItem(${index})">
-                                <i data-feather="trash-2" class="mr-1"></i> Remove
-                            </button>
+                            <div class="text-right mt-2 sm:mt-0">
+                                <p class="font-bold text-lg">₺${((item.price || 0) * (item.quantity || 1)).toLocaleString()}</p>
+                                <button class="text-red-600 mt-2 flex items-center justify-center hover:text-red-700 transition w-full sm:w-auto" onclick="removeItem(${index})">
+                                    <i data-feather="trash-2" class="mr-1"></i> Remove
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -402,3 +406,4 @@
 </body>
 
 </html>
+
