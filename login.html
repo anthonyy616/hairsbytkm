@@ -168,7 +168,7 @@
 
                     // Redirect after success
                     setTimeout(() => {
-                        window.location.href = 'homepage.html';
+                        window.location.href = 'index.html';
                     }, 1000);
                 }
 
@@ -252,7 +252,7 @@
         // Check if user is already logged in
         supabase.auth.getSession().then(({ data: { session } }) => {
             if (session) {
-                window.location.href = 'homepage.html';
+                window.location.href = 'index.html';
             }
         });
 
@@ -268,4 +268,5 @@
     </script>
     <script src="auth.js" defer></script>
 </body>
+
 </html>
