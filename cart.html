@@ -15,11 +15,11 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f0f0f;
+            background-color: #add8e6;
             color: #ffffff;
         }
         .gradient-text {
-            background: linear-gradient(90deg, #ff6b6b, #ffa502, #ff6b6b);
+            background: linear-gradient(90deg, #add8e6, #ffa502, #add8e6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -42,6 +42,34 @@
         .cta-button:hover {
             transform: scale(1.05);
             box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+        .addon-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        .addon-btn.active {
+            background: linear-gradient(90deg, #ff6b6b, #ffa502);
+            border: none;
+            color: white;
+        }
+        .signup-button {
+            background: linear-gradient(90deg, #FF6347, #FFD700); /* Replace with your chosen hex colors */
+            transition: all 0.3s ease;
+        }
+        .signup-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 99, 71, 0.3); /* Matches cta-button hover but uses Tomato color */
+        }
+        .nav-auth-section .signup-button {
+            background: linear-gradient(90deg, #FF6347, #FFD700); /* Replace with your chosen hex colors */
+            transition: all 0.3s ease;
+            color: white;
+        }
+        .nav-auth-section .signup-button:hover {
+            background: linear-gradient(90deg, #FF6347, #FFD700); /* Ensure gradient persists on hover */
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 99, 71, 0.3); /* Matches hover effect */
         }
     </style>
 </head>
@@ -117,8 +145,10 @@
                             <span>Subtotal</span>
                             <span id="subtotal">0 TL</span>
                         </div>
-                        
-                        
+                        <div class="flex justify-between">
+                            <span>Add-ons</span>
+                            <span id="addons-total">0 TL</span>
+                        </div>
                         <div class="flex justify-between">
                             <span>Booking Fee</span>
                             <span id="booking-fee">50 TL</span>
@@ -127,6 +157,16 @@
                             <span>Total</span>
                             <span id="total">0 TL</span>
                         </div>
+                    </div>
+
+                    <!-- Add-ons Section -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-4">Add-ons</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="addon-btn px-4 py-2 rounded-full" data-addon="Curls" data-price="50">Curls (50 TL)</button>
+                            <button class="addon-btn px-4 py-2 rounded-full" data-addon="Beads" data-price="150">Beads (150 TL)</button>
+                        </div>
+                                                <p class="text-gray-400 mb-1">Note: Price for add-ons could be subject to change at site, depending on customer's request</p>
                     </div>
             
                         <!-- Booking Section -->
@@ -206,6 +246,8 @@
                 let desc = item.description || '';
                 if (item.type) desc += desc ? `, Type: ${item.type}` : `Type: ${item.type}`;
 
+                
+
                 const itemHtml = `
                     <div class="mb-6 pb-6 border-b border-gray-800 last:border-0" data-aos="fade-up">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center">
@@ -255,14 +297,56 @@
         function updateTotals() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0);
-            const bookingFee = 50; // Flat booking fee, adjust as needed
-            const total = subtotal + bookingFee ;
+            
+            // Get selected add-ons
+            const selectedAddons = JSON.parse(localStorage.getItem('selectedAddons') || '[]');
+            const addonsTotal = selectedAddons.reduce((sum, addon) => sum + addon.price, 0);
+            
+            const bookingFee = 50; // Flat booking fee
+            const total = subtotal + addonsTotal + bookingFee;
 
             document.getElementById('subtotal').textContent = `${subtotal.toLocaleString()} TL`;
+            document.getElementById('addons-total').textContent = `${addonsTotal.toLocaleString()} TL`;
             document.getElementById('booking-fee').textContent = `${bookingFee.toLocaleString()} TL`;
             document.getElementById('total').textContent = `${total.toLocaleString()} TL`;
         }
 
+        // Add-on functionality
+        function initAddons() {
+            const addonButtons = document.querySelectorAll('.addon-btn');
+            addonButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const isActive = this.classList.contains('active');
+                    
+                    if (isActive) {
+                        this.classList.remove('active');
+                    } else {
+                        this.classList.add('active');
+                    }
+                    
+                    // Update selected add-ons in localStorage
+                    const selectedAddons = Array.from(document.querySelectorAll('.addon-btn.active')).map(btn => ({
+                        name: btn.dataset.addon,
+                        price: parseInt(btn.dataset.price, 10)
+                    }));
+                    
+                    localStorage.setItem('selectedAddons', JSON.stringify(selectedAddons));
+                    updateTotals();
+                });
+            });
+        }
+
+        // Load previously selected add-ons
+        function loadSelectedAddons() {
+            const selectedAddons = JSON.parse(localStorage.getItem('selectedAddons') || '[]');
+            selectedAddons.forEach(addon => {
+                const btn = document.querySelector(`[data-addon="${addon.name}"]`);
+                if (btn) {
+                    btn.classList.add('active');
+                }
+            });
+            updateTotals();
+        }
         // Appointment Booking Functions
         async function checkAvailability(date, time) {
             const appointmentTime = new Date(`${date}T${time}:00`).toISOString(); // Round to hour, UTC
@@ -311,8 +395,18 @@
 
             const appointmentTime = selectedDateTime.toISOString();
             const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0);
+            const selectedAddons = JSON.parse(localStorage.getItem('selectedAddons') || '[]');
+            const addonsTotal = selectedAddons.reduce((sum, addon) => sum + addon.price, 0);
             const bookingFee = 50;
-            const total = subtotal + bookingFee;
+            const total = subtotal + addonsTotal + bookingFee;
+
+            // Add add-ons to cart for booking
+            cart.push(...selectedAddons.map(addon => ({
+                name: addon.name,
+                type: 'addon',
+                price: addon.price,
+                quantity: 1
+            })));
 
             const isAvailable = await checkAvailability(date, time);
             if (!isAvailable) {
@@ -356,6 +450,7 @@
             console.log('WhatsApp message opened:', message);
 
             localStorage.removeItem('cart');
+            localStorage.removeItem('selectedAddons');
             window.location.href = 'index.html';
             }
     
@@ -377,7 +472,11 @@
             .subscribe();
 
         // Event Listeners
-        document.addEventListener('DOMContentLoaded', loadCart);
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCart();
+            initAddons();
+            loadSelectedAddons();
+        });
         document.getElementById('book-appointment').addEventListener('click', () => {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             if (cart.length === 0) {
@@ -404,6 +503,4 @@
     </div>
     <script src="auth.js" defer></script>
 </body>
-
 </html>
-
