@@ -14,17 +14,22 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f0f0f;
+            background-color: #add8e6;
             color: #ffffff;
         }
         .gradient-text {
-            background: linear-gradient(90deg, #ff6b6b, #ffa502, #ff6b6b);
+            background: linear-gradient(90deg, #add8e6, #ffa502, #add8e6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }.gradient-text-headers {
+            background: linear-gradient(90deg, #0f5870, #ffa502, #0f5870);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         .card-gradient {
-            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            background: linear-gradient(145deg, #4d4d4d7c, #4d4d4d7c);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .hover-lift {
@@ -58,7 +63,107 @@
         .social-icon:hover {
             transform: translateY(-5px);
         }
+        .signup-button {
+            background: linear-gradient(90deg, #FF6347, #FFD700); /* Replace with your chosen hex colors */
+            transition: all 0.3s ease;
+        }
+        .signup-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 99, 71, 0.3); /* Matches cta-button hover but uses Tomato color */
+        }
+        #nav-auth-section a.signup-button,
+        #mobile-auth-section a.signup-button {
+            background: linear-gradient(90deg, #FF6347, #FFD700) !important; /* Replace with your hex colors */
+            color: white !important;
+        }
+        #nav-auth-section a.signup-button:hover,
+        #mobile-auth-section a.signup-button:hover {
+            background: linear-gradient(90deg, #FF6347, #FFD700) !important; /* Ensure persistence */
+            transform: scale(1.05) !important;
+            box-shadow: 0 10px 20px rgba(255, 99, 71, 0.3) !important;
+        }
+        /* Theme Variables */ /* Light mode and dark mode */
+        :root {
+        --bg-color: #add8e6; /* Light blue default (light mode) */
+        --text-color: #333333; /* Dark text for light mode */
+        --card-bg: linear-gradient(145deg, #f5f5f5, #e0e0e0); /* Light card */
+        --border-color: rgba(0, 0, 0, 0.1); /* Light border */
+        --header-bg: rgba(255, 255, 255, 0.8); /* Light header */
+        --mobile-menu-bg: rgba(255, 255, 255, 0.9); /* Light mobile menu */
+        --gray-text: #666666; /* Gray for light */
+        --transition: all 0.3s ease; /* Smooth */
+        }
+
+        [data-theme="dark"] {
+        --bg-color: #0f0f0f;
+        --text-color: #ffffff;
+        --card-bg: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+        --border-color: rgba(255, 255, 255, 0.1);
+        --header-bg: rgba(0, 0, 0, 0.5);
+        --mobile-menu-bg: rgba(0, 0, 0, 0.7);
+        --gray-text: #a0a0a0; /* Gray for dark */
+        }
+
+        /* Apply Variables */
+        body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: var(--transition);
+        }
+        .card-gradient {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        transition: var(--transition);
+        }
+        header {
+        background-color: var(--header-bg);
+        transition: var(--transition);
+        }
+        #mobile-menu {
+        background-color: var(--mobile-menu-bg);
+        transition: var(--transition);
+        }
+        .text-gray-400 {
+        color: var(--gray-text);
+        transition: var(--transition);
+        }
+
+        /* Toggle Styles */
+        .theme-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: var(--text-color);
+            margin-right: 8px; /* Small spacing for better UX */
+        }
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            transition: opacity 0.3s ease;
+        }
+        .theme-toggle .sun-icon {
+            opacity: 0;
+            }
+        .theme-toggle .moon-icon {
+            opacity: 1;
+            position: absolute;
+        }   
+        [data-theme="light"] .theme-toggle .sun-icon {
+            opacity: 1;
+        }
+        [data-theme="light"] .theme-toggle .moon-icon {
+            opacity: 0;
+        }
     </style>
+        <meta name="color-scheme" content="light dark">
+        <script>
+            (function() {
+                const theme = localStorage.getItem('theme');
+                const systemLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+                const defaultTheme = theme || (systemLight ? 'light' : 'dark');
+                document.documentElement.setAttribute('data-theme', defaultTheme);
+        })();
+    </script>
 </head>
 <body class="min-h-screen">
     <!-- Navigation -->
@@ -76,8 +181,12 @@
             <div id="nav-auth-section">
                 <!-- This will be populated by auth.js -->
                 <div class="flex items-center space-x-4">
+                <button class="theme-toggle" aria-label="Toggle theme" title="Toggle light/dark mode">
+                    <i data-feather="sun" class="sun-icon"></i>
+                    <i data-feather="moon" class="moon-icon"></i>
+                </button>
                     <a href="login.html" class="hover:text-orange-400 transition hidden md:block">Login</a>
-                    <a href="signup.html" class="cta-button px-4 py-2 rounded-full transition text-white">Sign Up</a>
+                    <a href="signup.html" class="signup-button px-4 py-2 rounded-full transition text-white">Sign Up</a>
                 </div>
             </div>
             
@@ -94,6 +203,12 @@
                 <a href="cart.html" class="hover:text-orange-400 transition">Cart</a>
                 <div id="mobile-auth-section">
                     <!-- Mobile auth links will be populated by auth.js -->
+                    <div id="mobile-auth-section">
+  <!-- Mobile auth links will be populated by auth.js -->
+                        <button class="theme-toggle" aria-label="Toggle theme" title="Toggle light/dark mode">
+                            <i data-feather="sun" class="sun-icon"></i>
+                            <i data-feather="moon" class="moon-icon"></i>
+                        </button>
                     <a href="login.html" class="hover:text-orange-400 transition">Login</a>
                 </div>
             </div>
@@ -103,8 +218,8 @@
     <!-- Hero Section -->
     <section class="py-16 px-4 sm:px-8">
         <div class="container mx-auto text-center">
-            <h1 class="text-4xl md:text-6xl font-bold mb-6">Transform Your <span class="gradient-text">Look</span></h1>
-            <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6"> <span class="gradient-text-headers">Transform Your Look</span></h1>
+            <p class="text-xl text-white-300 max-w-2xl mx-auto mb-10">
                 Premium hair services tailored to your unique style. Experience the art of transformation with our expert stylists.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
@@ -117,7 +232,7 @@
     <!-- Services Section -->
     <section class="py-16 px-4 sm:px-8 bg-black bg-opacity-30">
         <div class="container mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-16">Our <span class="gradient-text">Services</span></h2>
+            <h2 class="text-3xl font-bold text-center mb-16">Our <span class="gradient-text-headers">Services</span></h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Service 1 -->
                 <div class="card-gradient p-8 rounded-xl text-center hover-lift">
@@ -152,28 +267,28 @@
     <!-- Testimonials -->
     <section class="py-16 px-4 sm:px-8">
         <div class="container mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-16">Client <span class="gradient-text">Testimonials</span></h2>
+            <h2 class="text-3xl font-bold text-center mb-16">Client <span class="gradient-text-headers">Testimonials</span></h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="testimonial-card p-8 rounded-xl">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-orange-400 mr-4"></div>
                         <div>
-                            <h4 class="font-bold">Sarah Johnson</h4>
+                            <h4 class="font-bold">valerie</h4>
                             <p class="text-gray-400 text-sm">Regular Client</p>
                         </div>
                     </div>
-                    <p class="text-gray-300 italic">"TKM transformed my hair completely! The attention to detail and personalized service is unmatched. I've never felt more confident."</p>
+                    <p class="text-gray-300 italic">"Best stylist I've had almost ever omg, really happy with the final product and the hair ate down ngl!"</p>
                 </div>
                 
                 <div class="testimonial-card p-8 rounded-xl">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-orange-400 mr-4"></div>
                         <div>
-                            <h4 class="font-bold">Michael Torres</h4>
+                            <h4 class="font-bold">James O.</h4>
                             <p class="text-gray-400 text-sm">First Time Client</p>
                         </div>
                     </div>
-                    <p class="text-gray-300 italic">"Exceptional service from start to finish. The stylist listened to exactly what I wanted and delivered beyond my expectations."</p>
+                    <p class="text-gray-300 italic">"I was skeptical about braiding my hair with them (cornrows with extra style) but they did a great job and they're affordable too. Will definitely recommend"</p>
                 </div>
             </div>
         </div>
@@ -212,8 +327,11 @@
                     <h4 class="font-bold mb-4">Contact Us</h4>
                     <ul class="space-y-2 text-gray-400">
                         <li>Lefke, Gemikonağı 99070</li>
+                        <a href="https://wa.me/905338861577"></a>
                         <li>+90 (533) 886 15 77</li>
-                        <li>+234 810 442 75 46</li>
+                        <a href="https://wa.me/2348104427546"></a>
+                        <li>+234 810 442 7546</li>
+                        <a href="mailto:hairsbytkm@gmail.com"></a>
                         <li>hairsbytkm@gmail.com</li>
                     </ul>
                 </div>
@@ -262,12 +380,64 @@
                 feather.replace();
             }, 100);
         });
-    </script>
+
+        // Theme Toggle Functionality
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        document.querySelectorAll('.theme-toggle').forEach(btn => btn.addEventListener('click', toggleTheme));
+
+        // Re-run Feather after load
+        document.addEventListener('DOMContentLoaded', feather.replace);
+
+        // Dynamically add toggle if missing (handles auth.js overwrites)
+        function addToggleIfMissing(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section && !section.querySelector('.theme-toggle')) {
+                const toggleBtn = document.createElement('button');
+                toggleBtn.className = 'theme-toggle';
+                toggleBtn.setAttribute('aria-label', 'Toggle theme');
+                toggleBtn.setAttribute('title', 'Toggle light/dark mode');
+                toggleBtn.innerHTML = `
+                <i data-feather="sun" class="sun-icon"></i>
+                <i data-feather="moon" class="moon-icon"></i>
+                `;
+                // Prepend to flex container or section
+                const flexContainer = section.querySelector('.flex.items-center.space-x-4') || section;
+                flexContainer.prepend(toggleBtn);
+                toggleBtn.addEventListener('click', toggleTheme);
+                feather.replace(); // Re-render icons
+            }
+        }
+
+        // Observe for changes from auth.js
+        const authObserver = new MutationObserver(() => {
+            addToggleIfMissing('nav-auth-section');
+            addToggleIfMissing('mobile-auth-section');
+        });
+        authObserver.observe(document.getElementById('nav-auth-section'), { childList: true, subtree: true });
+        authObserver.observe(document.getElementById('mobile-auth-section'), { childList: true, subtree: true });
+
+        // Initial add on load
+        document.addEventListener('DOMContentLoaded', () => {
+            addToggleIfMissing('nav-auth-section');
+            addToggleIfMissing('mobile-auth-section');
+        });
+        </script>
+    </div>
+    
     <script src="auth.js" defer></script>
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/2348104427546?text=Hi%20Hairs%20by%20TKM!%20I'd%20like%20to%20book%20an%20appointment." 
+        class="fixed bottom-6 right-6 w-16 h-16 bg-green-500 rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 transition-all duration-300 z-50" 
+        target="_blank" 
+        title="Reach us on WhatsApp!">
+            <i data-feather="message-circle" class="text-white text-xl"></i>
     </a>
 </body>
-
 </html>
-
-
-
