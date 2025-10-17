@@ -1,13 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Function to apply purple styles
     function applyPurpleStyles() {
-        const signupLinks = document.querySelectorAll('#nav-auth-section a[href="signup.html"], #mobile-auth-section a[href="signup.html"]');
-        signupLinks.forEach(link => {
-            link.classList.add('cta-button');
-            // Remove any conflicting classes
-            link.classList.remove('bg-amber-600', 'hover:bg-amber-700', 'bg-orange-600', 'hover:bg-orange-700');
-            link.style.background = '#654affff';
-            link.style.color = '#ffffff';
+        const authLinks = document.querySelectorAll('#nav-auth-section a, #mobile-auth-section a');
+        authLinks.forEach(link => {
+            const linkText = link.textContent.trim();
+            if (linkText === 'Sign Up' || linkText === 'Logout') {
+                link.classList.add('cta-button');
+                // Remove any conflicting classes
+                link.classList.remove('bg-amber-600', 'hover:bg-amber-700', 'bg-orange-600', 'hover:bg-orange-700');
+                link.style.background = '#6d38ff';
+                link.style.color = '#ffffff';
+            }
         });
     }
 
