@@ -255,7 +255,7 @@
                 statusDiv.classList.remove('hidden');
 
                 // Redirect to homepage immediately (no delay)
-                window.location.href = 'homepage.html';
+                window.location.href = 'index.html';
             }
 
             } catch (error) {
@@ -275,7 +275,7 @@
         // Check if user is already logged in
         supabase.auth.getSession().then(({ data: { session } }) => {
             if (session) {
-                window.location.href = 'homepage.html';
+                window.location.href = 'index.html';
             }
         });
         
@@ -286,7 +286,7 @@
             const { error } = await supabase.auth.signInWithOAuth({
             provider: provider,
             options: {
-                redirectTo: window.location.origin + '/homepage.html'  // Redirect after auth
+                redirectTo: window.location.origin + '/index.html'  // Redirect after auth
             }
             });
             if (error) {
@@ -303,3 +303,4 @@
     <script src="auth.js" defer></script>
 </body>
 </html>
+
