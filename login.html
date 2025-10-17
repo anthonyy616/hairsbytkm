@@ -370,10 +370,30 @@
             statusDiv.textContent = `Error: ${error.message}`;
             statusDiv.classList.remove('hidden');
             }
-        });
-        });
+            });
+            // Add after OAuth call
+            if (error) {
+              console.error('OAuth Error:', error);
+              const statusDiv = document.getElementById('status');
+              statusDiv.textContent = `Login failed: ${error.message}`;
+              statusDiv.classList.remove('hidden');
+            }
+        
+                // In login.html & signup.html <script>
+                const { error } = await supabase.auth.signInWithOAuth({
+                  provider: provider,
+                  options: {
+                    redirectTo: window.location.origin + '/index.html',
+                    queryParams: {
+                      access_type: 'offline',
+                      prompt: 'consent'  // Forces clean flow
+                    }
+                  }
+                });
+            
     </script>
     <script src="auth.js" defer></script>
 </body>
 </html>
+
 
