@@ -6,6 +6,7 @@
     <title>Your Cart - Hairs by TKM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -17,6 +18,9 @@
             font-family: 'Inter', sans-serif;
             background-color: #add8e6;
             color: #ffffff;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
         }
         .gradient-text {
             background: linear-gradient(90deg, #add8e6, #ffa502, #add8e6);
@@ -70,6 +74,33 @@
             background: linear-gradient(90deg, #FF6347, #FFD700); /* Ensure gradient persists on hover */
             transform: scale(1.05);
             box-shadow: 0 10px 20px rgba(255, 99, 71, 0.3); /* Matches hover effect */
+        }
+        footer a {
+            color: #add8e6;
+        }
+        footer a:hover {
+            color: #87ceeb;
+        }
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%);
+        }
+        #mobile-menu:not(.hidden) {
+            transform: translateX(0);
+        }
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: #add8e6;
+            animation: spin 1s linear infinite;
+            margin-left: 0.5rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -499,6 +530,14 @@
                 }
             });
         });
+
+        async function loginUser(event) {
+            event.preventDefault();
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            submitBtn.classList.add('loading');
+            // ... rest of the function ...
+            submitBtn.classList.remove('loading');
+        }
     </script>
     </div>
     <script src="auth.js" defer></script>
