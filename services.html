@@ -6,6 +6,7 @@
     <title>Our Services - Hairs by TKM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -17,6 +18,9 @@
             background-color: #add8e6;
             color: #ffffff;
         }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
         .gradient-text {
             background: linear-gradient(90deg, #add8e6, #ffa502, #add8e6);
             -webkit-background-clip: text;
@@ -25,14 +29,14 @@
         }
         .card-gradient {
             background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid #add8e6;
         }
         .hover-lift {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .hover-lift:hover {
+        hover-lift:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 25px -5px rgba(173, 216, 230, 0.3);
         }
         .cta-button {
             background: linear-gradient(90deg, #ff6b6b, #add8e6);
@@ -45,6 +49,25 @@
         .filter-btn.active {
             background: linear-gradient(90deg, #ff6b6b, #ffa502);
             color: white;
+        }
+        footer a {
+            color: #add8e6;
+        }
+        footer a:hover {
+            color: #87ceeb;
+        }
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%);
+        }
+        #mobile-menu:not(.hidden) {
+            transform: translateX(0);
+        }
+        #services-items-container {
+            gap: 2rem; /* Tailwind: gap-8 */
+        }
+        .card-gradient {
+            padding: 2rem; /* Tailwind: p-8 */
         }
         /* Price Disclaimer Pop-Up */
         #price-disclaimer {
