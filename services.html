@@ -6,16 +6,21 @@
     <title>Our Services - Hairs by TKM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #add8e6;
             color: #ffffff;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
         }
         .gradient-text {
             background: linear-gradient(90deg, #add8e6, #ffa502, #add8e6);
@@ -25,14 +30,14 @@
         }
         .card-gradient {
             background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid #add8e6;
         }
         .hover-lift {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .hover-lift:hover {
+        hover-lift:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 25px -5px rgba(173, 216, 230, 0.3);
         }
         .cta-button {
             background: linear-gradient(90deg, #ff6b6b, #add8e6);
@@ -45,6 +50,25 @@
         .filter-btn.active {
             background: linear-gradient(90deg, #ff6b6b, #ffa502);
             color: white;
+        }
+        footer a {
+            color: #add8e6;
+        }
+        footer a:hover {
+            color: #87ceeb;
+        }
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%);
+        }
+        #mobile-menu:not(.hidden) {
+            transform: translateX(0);
+        }
+        #services-items-container {
+            gap: 2rem; /* Tailwind: gap-8 */
+        }
+        .card-gradient {
+            padding: 2rem; /* Tailwind: p-8 */
         }
         /* Price Disclaimer Pop-Up */
         #price-disclaimer {
@@ -170,7 +194,7 @@
             <div class="text-2xl font-bold gradient-text">HAIRS BY TKM</div>
             
             <nav class="hidden md:flex space-x-6">
-                <a href="index.html" class="hover:text-orange-400 transition">Home</a>
+                <a href="homepage.html" class="hover:text-orange-400 transition">Home</a>
                 <a href="services.html" class="hover:text-orange-400 transition">Services</a>
                 <a href="cart.html" class="hover:text-orange-400 transition">Cart</a>
             </nav>
@@ -196,7 +220,7 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-black bg-opacity-70 px-4 py-2">
             <div class="flex flex-col space-y-3 text-white">
-                <a href="index.html" class="hover:text-orange-400 transition">Home</a>
+                <a href="homepage.html" class="hover:text-orange-400 transition">Home</a>
                 <a href="services.html" class="hover:text-orange-400 transition">Services</a>
                 <a href="cart.html" class="hover:text-orange-400 transition">Cart</a>
                 <div id="mobile-auth-section">
@@ -613,7 +637,7 @@
                 <div>
                     <h4 class="font-bold mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="index.html" class="hover:text-orange-400 transition">Home</a></li>
+                        <li><a href="homepage.html" class="hover:text-orange-400 transition">Home</a></li>
                         <li><a href="services.html" class="hover:text-orange-400 transition">Services</a></li>
                         <li><a href="style.html" class="hover:text-orange-400 transition">Customize Style</a></li>
                         <li><a href="cart.html" class="hover:text-orange-400 transition">Cart</a></li>
@@ -923,5 +947,6 @@ function updatePriceDisplay(selectElement) {
         </button>
     </div>
     <script src="auth.js" defer></script>
+    <script src="auth-patch.js" defer></script>
 </body>
 </html>
